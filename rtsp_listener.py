@@ -2,6 +2,7 @@
 import cv2
 import time
 
+import os
 import argparse
 import numpy as np
 from PIL import Image
@@ -9,6 +10,9 @@ from utils.anchor_generator import generate_anchors
 from utils.anchor_decode import decode_bbox
 from utils.nms import single_class_non_max_suppression
 from load_model.pytorch_loader import load_pytorch_model, pytorch_inference
+
+#NI**ERLICIOUS TCP->HOLY UDP for rtsp streaming
+os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
 
 # model = load_pytorch_model('models/face_mask_detection.pth');
 model = load_pytorch_model('models/model360.pth');
@@ -94,7 +98,7 @@ def inference(image,
 
 
 def run_on_video(video_path, output_video_name, conf_thresh):
-    cap = cv2.VideoCapture(video_path)
+    cap = cv2.VideoCapture("rtsp://192.168.1.50:5554/camera", cv2.CAP_FFMPEG)
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
     fps = cap.get(cv2.CAP_PROP_FPS)
